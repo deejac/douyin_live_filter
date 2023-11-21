@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>hls.js player example</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  </head>
+  <body>
+    <video id="video" controls></video>
+    <script>
+      var video = document.getElementById("video");
+      if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource("http://127.0.0.1:8000/path/to/video.m3u8");
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+           video.play();
+        });
+      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = "http://127.0.0.1:8000/path/to/video.m3u8";
+        video.addEventListener("loadedmetadata", function () {
+          video.play();
+        });
+      }
+    </script>
+  </body>
+</html>
