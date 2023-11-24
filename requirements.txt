@@ -1,0 +1,5 @@
+selenium
+flask
+opencv-python
+opencv-python-headless
+numpy
