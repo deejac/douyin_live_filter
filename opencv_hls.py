@@ -13,8 +13,7 @@ def adjust_brightness(image, threshold, slope):
     actor = 1/(scar+0.2)
     l_channel = np.where(l_channel  , l_channel*actor, l_channel)
 
-   # l_channel = (l_channel - np.min(l_channel)) / (np.max(l_channel) - np.min(l_channel))
-    #l_channel = np.where((l_channel>90)&(l_channel<100), l_channel * 1.5, l_channel)
+    l_channel = np.where((l_channel>(np.max(l_channel)-2)), l_channel*0.5, l_channel)
     #l_channel = np.where(l_channel < threshold, l_channel * slope, l_channel)
     scale = 0.03
     #l_channel = np.log1p(l_channel*10)
@@ -30,7 +29,9 @@ def adjust_brightness(image, threshold, slope):
     return adjusted_image
 
 # HLS协议视频源地址
-hls_url = "http://pull-hs-f5.flive.douyincdn.com/stage/stream-7304891437177522956_ld/index.m3u8?expire=1701418949&sign=128619be920c10cb7d5b97c0706cfbd9&volcSecret=128619be920c10cb7d5b97c0706cfbd9&volcTime=1701418949"
+#hls_url = "http://pull-hls-f96.douyincdn.com/stage/stream-402386804826702506_sd.m3u8?expire=1701672530&sign=3b1224b9a3e92d24e5690ac98dd54a46"
+#hls_url = "http://pull-hls-f96.douyincdn.com/stage/stream-402386804826702506_hd.m3u8?expire=1701672611&sign=3440f8bc414b846dc746dd3e997f6386"
+hls_url = "http://pull-l3.douyincdn.com/third/stream-7306056109381503781_or4.m3u8?auth_key=1701681292-0-0-6211cad00fb71443c6f7a6679b9ba3eb"
 
 # 使用OpenCV读取HLS协议数据
 cap = cv2.VideoCapture(hls_url)
@@ -38,6 +39,7 @@ cap = cv2.VideoCapture(hls_url)
 # 获取输入源的分辨率
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+print("视频分辨率：", width, "x", height)
 #width = 150
 #height = 150
 
@@ -69,12 +71,12 @@ while True:
     # 在这里进行卷积处理，这里只是一个示例，你可以根据你的需求修改
     #processed_frame = cv2.filter2D(frame, -1, kernel)
     # 选择放大区域的圆心位置（x，y）
-    center_x = 240
-    center_y = 550
+    center_x = 300
+    center_y = 650
 
     # 设置放大倍数和半径
     scale_factor = 3
-    radius = 45
+    radius = 50
 
     # 在原始图像上绘制放大区域的圆圈
     # cv2.circle(image, (center_x, center_y), radius, (0, 255, 0), 2)
